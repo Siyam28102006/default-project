@@ -25,7 +25,7 @@ Requires Python 3.10+ on Windows / macOS / Linux.
 
 ## ✨ Features
 
-- 🍅 Focus 25 / Short 5 / Long 15 — all editable, plus cycle length
+- 🍅 Focus 25 / Short 5 / Long 15 — fully customizable with − / + steppers (or type any value), live-applied + one-tap presets (Classic / Quick / Deep)
 - ⏯ Start / Pause / Resume, Reset, Skip — buttons or keyboard
 - ⭕ Glowing progress ring with mode colors (ember / teal / violet)
 - 🔥 Streak + stats row: cycle, completed sessions, tasks done

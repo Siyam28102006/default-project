@@ -144,7 +144,7 @@ class PomodoroApp(ctk.CTk):
 
         self.configure(fg_color=BG)
         self.title("Midnight Pomodoro")
-        self.geometry("440x860")
+        self.geometry("440x960")
         self.resizable(False, False)
         try:
             if ICON_FILE:
@@ -256,19 +256,33 @@ class PomodoroApp(ctk.CTk):
         # settings card
         settings = self.card()
         settings.pack(padx=20, pady=10, fill="x")
-        ctk.CTkLabel(settings, text="SETTINGS",
+        ctk.CTkLabel(settings, text="CUSTOMIZE TIMERS",
                      font=("Segoe UI", 11, "bold"),
                      text_color=MUTED).pack(pady=(12, 2))
-        grid = ctk.CTkFrame(settings, fg_color="transparent")
-        grid.pack()
-        self.focus_entry = self._num_field(grid, "Focus", 0, self.data["focus_min"])
-        self.short_entry = self._num_field(grid, "Short", 1, self.data["short_min"])
-        self.long_entry = self._num_field(grid, "Long", 2, self.data["long_min"])
-        self.cycle_entry = self._num_field(grid, "Cycle", 3,
-                                           self.data["sessions_before_long"])
+
+        self.focus_entry = self._stepper_row(settings, "Focus length", self.data["focus_min"], 1, 180, "min")
+        self.short_entry = self._stepper_row(settings, "Short break", self.data["short_min"], 1, 60, "min")
+        self.long_entry = self._stepper_row(settings, "Long break", self.data["long_min"], 1, 90, "min")
+        self.cycle_entry = self._stepper_row(settings, "Long break every", self.data["sessions_before_long"], 2, 12, "sessions", step=1)
+
+        presets = ctk.CTkFrame(settings, fg_color="transparent")
+        presets.pack(pady=(8, 2))
+        for name, vals in (("Classic 25/5", (25, 5, 15, 4)),
+                           ("Quick 15/3", (15, 3, 10, 4)),
+                           ("Deep 50/10", (50, 10, 30, 4))):
+            ctk.CTkButton(presets, text=name, width=110, height=28,
+                          corner_radius=14, font=("Segoe UI", 11, "bold"),
+                          fg_color=CARD2, text_color=TEXT,
+                          border_width=1, border_color=BORDER,
+                          hover_color="#23232e",
+                          command=lambda v=vals: self.apply_preset(v)).pack(
+                              side="left", padx=4)
+
+        ctk.CTkLabel(settings, text="Changes apply instantly when paused.",
+                     font=("Segoe UI", 11), text_color="#55555f").pack(pady=(2, 4))
 
         toggles = ctk.CTkFrame(settings, fg_color="transparent")
-        toggles.pack(pady=(8, 2))
+        toggles.pack(pady=(6, 12))
         self.auto_var = ctk.BooleanVar(value=self.data["auto_start_breaks"])
         self.sound_var = ctk.BooleanVar(value=self.data["sound_on"])
         self.top_var = ctk.BooleanVar(value=self.data.get("always_on_top", False))
@@ -281,13 +295,6 @@ class PomodoroApp(ctk.CTk):
                             border_color=BORDER,
                             command=self.save_settings_from_ui).pack(
                                 side="left", padx=10)
-
-        ctk.CTkButton(settings, text="Apply", width=120, height=32,
-                      corner_radius=10, font=("Segoe UI", 12, "bold"),
-                      fg_color=CARD2, text_color=TEXT,
-                      border_width=1, border_color=BORDER,
-                      hover_color="#23232e",
-                      command=self.save_settings_from_ui).pack(pady=(6, 12))
 
         # tasks card
         tasks = self.card()
@@ -336,17 +343,56 @@ class PomodoroApp(ctk.CTk):
         box.value_label = v  # type: ignore
         return box
 
-    def _num_field(self, parent, label, col, value):
-        f = ctk.CTkFrame(parent, fg_color="transparent")
-        f.grid(row=0, column=col, padx=8)
-        ctk.CTkLabel(f, text=label, font=("Segoe UI", 11),
-                     text_color=MUTED).pack()
-        e = ctk.CTkEntry(f, width=62, height=34, corner_radius=10,
-                         justify="center", font=("Segoe UI", 14, "bold"),
-                         fg_color=CARD2, border_color=BORDER, text_color=TEXT)
-        e.insert(0, str(value))
-        e.pack()
-        return e
+    def _stepper_row(self, parent, label, value, lo, hi, unit, step=5):
+        """A labeled - [value] + stepper. Typing works too; saves live."""
+        row = ctk.CTkFrame(parent, fg_color="transparent")
+        row.pack(fill="x", padx=14, pady=3)
+        ctk.CTkLabel(row, text=label, font=("Segoe UI", 13),
+                     text_color=TEXT).pack(side="left")
+        ctk.CTkLabel(row, text=unit, font=("Segoe UI", 11),
+                     text_color=MUTED).pack(side="right", padx=(6, 0))
+
+        def bump(delta):
+            try:
+                cur = int(entry.get())
+            except Exception:
+                cur = value
+            entry.delete(0, "end")
+            entry.insert(0, str(max(lo, min(hi, cur + delta))))
+            self.save_settings_from_ui()
+
+        plus = ctk.CTkButton(row, text="+", width=34, height=30,
+                             corner_radius=9, font=("Segoe UI", 15, "bold"),
+                             fg_color=CARD2, text_color=TEXT,
+                             border_width=1, border_color=BORDER,
+                             hover_color="#23232e",
+                             command=lambda: bump(step))
+        plus.pack(side="right", padx=(4, 0))
+
+        entry = ctk.CTkEntry(row, width=58, height=30, corner_radius=9,
+                             justify="center", font=("Segoe UI", 14, "bold"),
+                             fg_color=CARD2, border_color=BORDER, text_color=TEXT)
+        entry.insert(0, str(value))
+        entry.pack(side="right")
+        entry.bind("<Return>", lambda _e: self.save_settings_from_ui())
+        entry.bind("<FocusOut>", lambda _e: self.save_settings_from_ui())
+
+        minus = ctk.CTkButton(row, text="−", width=34, height=30,
+                              corner_radius=9, font=("Segoe UI", 15, "bold"),
+                              fg_color=CARD2, text_color=TEXT,
+                              border_width=1, border_color=BORDER,
+                              hover_color="#23232e",
+                              command=lambda: bump(-step))
+        minus.pack(side="right", padx=(0, 4))
+        return entry
+
+    def apply_preset(self, vals):
+        f, s, l, c = vals
+        for entry, v in ((self.focus_entry, f), (self.short_entry, s),
+                         (self.long_entry, l), (self.cycle_entry, c)):
+            entry.delete(0, "end")
+            entry.insert(0, str(v))
+        self.save_settings_from_ui()
 
     def bind_shortcuts(self):
         self.bind("<space>", lambda _e: self.toggle())
@@ -481,10 +527,21 @@ class PomodoroApp(ctk.CTk):
             return fallback
 
     def save_settings_from_ui(self):
-        self.data["focus_min"] = self._safe_int(self.focus_entry, 25)
-        self.data["short_min"] = self._safe_int(self.short_entry, 5)
-        self.data["long_min"] = self._safe_int(self.long_entry, 15)
+        self.data["focus_min"] = self._safe_int(self.focus_entry, 25, 1, 180)
+        self.data["short_min"] = self._safe_int(self.short_entry, 5, 1, 60)
+        self.data["long_min"] = self._safe_int(self.long_entry, 15, 1, 90)
         self.data["sessions_before_long"] = self._safe_int(self.cycle_entry, 4, 2, 12)
+        # reflect clamped values back into the boxes
+        for entry, val in ((self.focus_entry, self.data["focus_min"]),
+                           (self.short_entry, self.data["short_min"]),
+                           (self.long_entry, self.data["long_min"]),
+                           (self.cycle_entry, self.data["sessions_before_long"])):
+            try:
+                if entry.get().strip() != str(val):
+                    entry.delete(0, "end")
+                    entry.insert(0, str(val))
+            except Exception:
+                pass
         self.data["auto_start_breaks"] = bool(self.auto_var.get())
         self.data["sound_on"] = bool(self.sound_var.get())
         self.data["always_on_top"] = bool(self.top_var.get())

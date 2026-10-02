@@ -12,6 +12,24 @@ import customtkinter as ctk
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 SETTINGS_FILE = os.path.join(APP_DIR, "pomodoro_data.json")
 
+
+def _find_icon():
+    candidates = [os.path.join(APP_DIR, "pomodoro.ico")]
+    try:
+        import sys
+        base = getattr(sys, "_MEIPASS", None)
+        if base:
+            candidates.insert(0, os.path.join(base, "pomodoro.ico"))
+    except Exception:
+        pass
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return None
+
+
+ICON_FILE = _find_icon()
+
 # ---------- OLED midnight palette ----------
 BG = "#07070b"          # app background (near-black)
 CARD = "#121218"        # card surface
@@ -128,6 +146,11 @@ class PomodoroApp(ctk.CTk):
         self.title("Midnight Pomodoro")
         self.geometry("440x860")
         self.resizable(False, False)
+        try:
+            if ICON_FILE:
+                self.iconbitmap(ICON_FILE)
+        except Exception:
+            pass
         self.attributes("-topmost", bool(self.data.get("always_on_top")))
 
         self.mode = "Focus"

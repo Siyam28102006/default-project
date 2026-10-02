@@ -1,36 +1,87 @@
-# 🌙 Midnight Pomodoro Timer
+# 🌙 Midnight Pomodoro
 
-Premium OLED-dark desktop Pomodoro app (Python + CustomTkinter).
+![icon](pomodoro.png)
 
-## Why you'll love it
-- True-black midnight theme, glowing progress ring
-- Mode colors: ember Focus, teal Short Break, violet Long Break
-- Big 46px Start / Pause + Reset / Skip, keyboard shortcuts
-- Stats row: cycle, completed, tasks done
-- Always-on-top, auto-start breaks, richer finish chime
-- Tasks with clear-done + persistent settings in `pomodoro_data.json`
+A cute, OLED-dark Pomodoro timer for Windows. Stay focused with a glowing progress ring, gentle chimes, tasks, and stats — no account, no browser tab, no distractions.
 
-## Features
-- Focus 25 / Short 5 / Long 15 (all editable) + cycle length
-- Start / Pause / Reset / Skip — buttons or `Space / R / S / 1-2-3`
-- Auto-switch: long break every N sessions
-- Ring progress, session dots, streak + stats
-- Sound + auto-start + always-on-top (toggleable)
-- Task list with save (add / check / delete / clear done)
-- Settings + tasks persist in `pomodoro_data.json`
+## ⬇️ Install (easiest)
 
-## ⬇️ Download the app (no Python needed)
+1. Go to [**Releases**](https://github.com/Siyam28102006/default-project/releases) and download **`MidnightPomodoro.exe`** from the newest version.
+2. Double-click it. That's it — no Python needed.
+3. Optional: right-click the running app → **Pin to taskbar** for one-click focus sessions.
 
-**Windows:** [Download MidnightPomodoro.exe v1.0.0](https://github.com/Siyam28102006/default-project/releases/tag/v1.0.0)
-— download and double-click to run.
+> First run: Windows may show “Unknown publisher” → click **More info → Run anyway**. The exe is built from this repo with PyInstaller.
 
-## Run from source
+## ▶️ Run from source
+
 ```bash
+git clone https://github.com/Siyam28102006/default-project.git
+cd default-project
 pip install -r requirements.txt
 python pomodoro.py
 ```
 
-## Files
-- `pomodoro.py` — the whole app (single file)
-- `requirements.txt` — `customtkinter`
-- `pomodoro_data.json` — auto-created on first use (your settings/tasks, ignored by git)
+Requires Python 3.10+ on Windows / macOS / Linux.
+
+## ✨ Features
+
+- 🍅 Focus 25 / Short 5 / Long 15 — all editable, plus cycle length
+- ⏯ Start / Pause / Resume, Reset, Skip — buttons or keyboard
+- ⭕ Glowing progress ring with mode colors (ember / teal / violet)
+- 🔥 Streak + stats row: cycle, completed sessions, tasks done
+- 🔔 Gentle finish chime + window pop, auto-start breaks (toggleable)
+- 📌 Always-on-top toggle for study sessions
+- ✅ Task list: add with Enter, check off, delete, clear-done — auto-saved
+- 💾 Settings + tasks persist in `pomodoro_data.json` (created next to the app)
+
+### ⌨️ Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Space` | Start / Pause |
+| `R` | Reset timer |
+| `S` | Skip to next mode |
+| `1` / `2` / `3` | Focus / Short Break / Long Break |
+
+## 🖼️ Icon
+
+Cute tomato icon lives in this repo:
+
+- `pomodoro.png` — preview + README art
+- `pomodoro.ico` — Windows window + exe icon (16–256 px, generated with Pillow)
+
+Regenerate it anytime:
+
+```bash
+pip install pillow
+python make_icon.py
+```
+
+## 🛠️ Build your own exe
+
+```bash
+pip install -r requirements.txt pyinstaller
+python -m PyInstaller --noconfirm --onefile --windowed \
+  --name MidnightPomodoro --icon pomodoro.ico \
+  --add-data "pomodoro.ico;." pomodoro.py
+```
+
+Find it at `dist/MidnightPomodoro.exe`.
+
+## 📁 Files
+
+| File | What |
+|------|------|
+| `pomodoro.py` | The whole app (single file) |
+| `pomodoro.png` / `pomodoro.ico` | Cute desktop icon |
+| `make_icon.py` | Icon generator (Pillow) |
+| `requirements.txt` | `customtkinter`, `pillow` |
+| `pomodoro_data.json` | Auto-created settings/tasks (git-ignored) |
+
+## 💡 Tips
+
+- Keep the cycle at 4: after 4 focuses you earn a long break.
+- Pin the app on top while writing essays or coding.
+- Add 1–3 tasks before you press Start — small lists win.
+
+Made with Python + CustomTkinter. If it helps you focus, star the repo. 🌙

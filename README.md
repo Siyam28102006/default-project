@@ -19,7 +19,12 @@ Premium OLED-dark desktop Pomodoro app (Python + CustomTkinter).
 - Task list with save (add / check / delete / clear done)
 - Settings + tasks persist in `pomodoro_data.json`
 
-## Run
+## ⬇️ Download the app (no Python needed)
+
+**Windows:** [Download MidnightPomodoro.exe v1.0.0](https://github.com/Siyam28102006/default-project/releases/tag/v1.0.0)
+— download and double-click to run.
+
+## Run from source
 ```bash
 pip install -r requirements.txt
 python pomodoro.py

@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 pomodoro_data.json
+build/
+dist/
+*.spec

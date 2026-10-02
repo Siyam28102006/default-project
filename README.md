@@ -1,14 +1,22 @@
-# 🍅 Easy Pomodoro Timer
+# 🌙 Midnight Pomodoro Timer
 
-Simple desktop Pomodoro app built with Python + CustomTkinter.
+Premium OLED-dark desktop Pomodoro app (Python + CustomTkinter).
+
+## Why you'll love it
+- True-black midnight theme, glowing progress ring
+- Mode colors: ember Focus, teal Short Break, violet Long Break
+- Big 46px Start / Pause + Reset / Skip, keyboard shortcuts
+- Stats row: cycle, completed, tasks done
+- Always-on-top, auto-start breaks, richer finish chime
+- Tasks with clear-done + persistent settings in `pomodoro_data.json`
 
 ## Features
-- Focus 25 / Short 5 / Long 15 (all editable)
-- Start / Pause / Reset / Skip
-- Auto-switch: long break every 4 sessions
-- Session dots + total completed counter
-- Sound on finish + auto-start breaks (toggleable)
-- Task list with save (add / check / delete)
+- Focus 25 / Short 5 / Long 15 (all editable) + cycle length
+- Start / Pause / Reset / Skip — buttons or `Space / R / S / 1-2-3`
+- Auto-switch: long break every N sessions
+- Ring progress, session dots, streak + stats
+- Sound + auto-start + always-on-top (toggleable)
+- Task list with save (add / check / delete / clear done)
 - Settings + tasks persist in `pomodoro_data.json`
 
 ## Run

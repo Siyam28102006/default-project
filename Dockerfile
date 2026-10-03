@@ -3,7 +3,7 @@
 FROM jlesage/baseimage-gui:debian-12-v4
 
 # System deps: Python + Tk + a decent font. `add-pkg` cleans apt cache for us.
-RUN add-pkg python3 python3-tk fonts-dejavu \
+RUN add-pkg python3 python3-tk python3-pip fonts-dejavu \
     && pip3 install --no-cache-dir --break-system-packages customtkinter
 
 # App files.

@@ -12,6 +12,23 @@ A cute, OLED-dark Pomodoro timer for Windows. Stay focused with a glowing progre
 
 > First run: Windows may show “Unknown publisher” → click **More info → Run anyway**. The exe is built from this repo with PyInstaller.
 
+## 🐳 Run anywhere with Docker (Mac / Linux / server, no code)
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) (one-time).
+2. Then either:
+   ```bash
+   # A) prebuilt image (nothing to download but Docker)
+   docker run -d --name pomodoro -p 5800:5800 \
+     -v pomodoro-data:/config \
+     ghcr.io/siyam28102006/default-project:latest
+   ```
+   ```bash
+   # B) build from this repo
+   docker compose up -d --build
+   ```
+3. Open **http://localhost:5800** in your browser — the app is right there.
+4. Stop with `docker stop pomodoro` (A) or `docker compose down` (B). Settings/tasks persist in the volume / `./data` folder.
+
 ## ▶️ Run from source
 
 ```bash

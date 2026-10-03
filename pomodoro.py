@@ -10,7 +10,8 @@ import os
 import customtkinter as ctk
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-SETTINGS_FILE = os.path.join(APP_DIR, "pomodoro_data.json")
+# Overridable for Docker: -e POMODORO_DATA_FILE=/config/pomodoro_data.json
+SETTINGS_FILE = os.environ.get("POMODORO_DATA_FILE") or os.path.join(APP_DIR, "pomodoro_data.json")
 
 
 def _find_icon():

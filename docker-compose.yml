@@ -1,0 +1,13 @@
+services:
+  pomodoro:
+    build: .
+    image: midnight-pomodoro
+    container_name: midnight-pomodoro
+    ports:
+      - "5800:5800"   # open http://localhost:5800 in your browser
+      # - "5900:5900" # uncomment for direct VNC client access
+    volumes:
+      - ./data:/config   # settings + tasks persist here
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
